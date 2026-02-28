@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvis.local/schemas/approval_request.schema.json",
+  "title": "ApprovalRequest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["approval_id", "run_id", "action", "risk", "summary", "preview", "expires_at"],
+  "properties": {
+    "approval_id": {
+      "type": "string",
+      "pattern": "^apr_[a-zA-Z0-9]{6,64}$"
+    },
+    "run_id": {
+      "type": "string"
+    },
+    "action": {
+      "type": "string"
+    },
+    "risk": {
+      "type": "string",
+      "enum": ["high"]
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 10
+    },
+    "reasoning": {
+      "type": "string"
+    },
+    "preview": {
+      "type": "object",
+      "description": "Concrete side-effect preview such as recipient list, files to delete, setting values"
+    },
+    "requires_biometric": {
+      "type": "boolean",
+      "default": false
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "decision": {
+      "type": "string",
+      "enum": ["pending", "approved", "denied"],
+      "default": "pending"
+    },
+    "decision_reason": {
+      "type": "string"
+    }
+  }
+}

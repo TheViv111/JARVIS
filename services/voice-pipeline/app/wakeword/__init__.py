@@ -1,0 +1,2 @@
+"""Wakeword module."""
+

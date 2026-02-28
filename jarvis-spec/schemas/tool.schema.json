@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvis.local/schemas/tool.schema.json",
+  "title": "Tool",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["tool_id", "name", "description", "source", "risk_tier", "input_schema", "timeouts_ms"],
+  "properties": {
+    "tool_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_.-]{3,64}$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 120
+    },
+    "description": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 2000
+    },
+    "source": {
+      "type": "string",
+      "enum": ["python", "mcp", "native", "api"]
+    },
+    "risk_tier": {
+      "type": "string",
+      "enum": ["low", "medium", "high"]
+    },
+    "requires_network": {
+      "type": "boolean",
+      "default": false
+    },
+    "requires_approval_override": {
+      "type": "boolean",
+      "default": false
+    },
+    "input_schema": {
+      "type": "object"
+    },
+    "timeouts_ms": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["soft", "hard"],
+      "properties": {
+        "soft": { "type": "integer", "minimum": 100 },
+        "hard": { "type": "integer", "minimum": 500 }
+      }
+    },
+    "idempotent": {
+      "type": "boolean",
+      "default": true
+    },
+    "side_effects": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": []
+    },
+    "verify": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "strategy"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "strategy": { "type": "string", "enum": ["none", "state_readback", "screen_check", "api_check"] }
+      }
+    }
+  }
+}

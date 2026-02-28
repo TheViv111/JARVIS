@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvis.local/schemas/policy.schema.json",
+  "title": "Policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "autonomy_mode", "risk_rules", "retention"],
+  "properties": {
+    "version": { "type": "string", "pattern": "^v[0-9]+(\\.[0-9]+)?$" },
+    "autonomy_mode": { "type": "string", "enum": ["conservative", "agentic"] },
+    "clarification_threshold": { "type": "number", "minimum": 0, "maximum": 1, "default": 0.72 },
+    "risk_rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["low", "medium", "high", "always_high_actions"],
+      "properties": {
+        "low": { "type": "string", "enum": ["auto_run"] },
+        "medium": { "type": "string", "enum": ["auto_notify_cancel"] },
+        "high": { "type": "string", "enum": ["require_approval"] },
+        "always_high_actions": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        }
+      }
+    },
+    "biometric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "voice_min", "face_min", "liveness_required"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "voice_min": { "type": "number", "minimum": 0, "maximum": 1 },
+        "face_min": { "type": "number", "minimum": 0, "maximum": 1 },
+        "liveness_required": { "type": "boolean" }
+      }
+    },
+    "retention": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["raw_hours", "summary_days", "graph_ttl_days"],
+      "properties": {
+        "raw_hours": { "type": "integer", "minimum": 1 },
+        "summary_days": { "type": "integer", "minimum": 1 },
+        "graph_ttl_days": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "learn_from_me": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "approval_runs"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "approval_runs": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

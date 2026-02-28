@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jarvis.local/schemas/memory_event.schema.json",
+  "title": "MemoryEvent",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["event_id", "timestamp", "event_type", "source", "payload", "sensitivity"],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "pattern": "^evt_[a-zA-Z0-9]{6,64}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": ["screen_snapshot", "app_focus", "ocr_text", "tool_action", "email_summary", "calendar_item", "user_note", "workflow_run"]
+    },
+    "source": {
+      "type": "string",
+      "enum": ["timeline", "tool", "integration", "user", "agent"]
+    },
+    "payload": {
+      "type": "object"
+    },
+    "entities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["type", "value", "confidence"],
+        "properties": {
+          "type": { "type": "string" },
+          "value": { "type": "string" },
+          "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+        }
+      },
+      "default": []
+    },
+    "sensitivity": {
+      "type": "string",
+      "enum": ["public", "private", "secret"]
+    },
+    "ttl_hours": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "redacted": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}
